@@ -6,6 +6,7 @@
   "private": true,
   "main": "node_modules/expo/AppEntry.js",
   "dependencies": {
+    "bluebird": "^3.5.0",
     "expo": "^19.0.0",
     "firebase": "^4.1.5",
     "react": "16.0.0-alpha.12",

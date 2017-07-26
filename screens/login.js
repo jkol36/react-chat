@@ -24,7 +24,7 @@ export default class LoginComponent extends Component {
                   console.log(userData)
                   if (userData != null) {
                       this.firebaseRef.child(auth.uid).off('value')
-                      this.goProfile(userData)
+                      this.goMessenger(userData)
                    }
               })
           }
@@ -46,11 +46,11 @@ export default class LoginComponent extends Component {
       firebase.database().ref('users').child(uid).update({...userData,uid})
   }
 
-   goProfile(userData) {
+   goMessenger(userData) {
           const resetAction = NavigationActions.reset({
               index: 0,
               actions: [
-              NavigationActions.navigate({ routeName: 'Profile', params: {userData} })
+              NavigationActions.navigate({ routeName: 'Messenger', params: {userData} })
               ]
           })
           this.props.navigation.dispatch(resetAction)
@@ -83,7 +83,7 @@ export default class LoginComponent extends Component {
           //console.log(uid, email, displayName)
           this.createUser(uid, userData)
           //console.log(userData)
-          this.goProfile(userData)
+          this.goMessenger(userData)
           break
         }
         case 'cancel': {
