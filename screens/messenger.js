@@ -1,9 +1,4 @@
 import React, { Component } from 'react';
-import {
-  View,
-  TouchableHighlight,
-  Button
-} from 'react-native'
 import { NavigationActions } from 'react-navigation'
 import { GiftedChat } from 'react-native-gifted-chat';
 import { messagesRef } from '../config/index'
@@ -17,8 +12,6 @@ export default class Messenger extends React.Component {
       user: props.navigation.state.params.userData,
       user2: props.navigation.state.params.user2
     }
-    this.renderChatFooter = this.renderChatFooter.bind(this)
-    this.goUserList = this.goUserList.bind(this)
   }
 
   componentDidMount() {
@@ -55,27 +48,7 @@ export default class Messenger extends React.Component {
       // ],
     // });
   }
-  goUserList(userData) {
-          const resetAction = NavigationActions.reset({
-              index: 0,
-              actions: [
-              NavigationActions.navigate({ routeName: 'UserList', params: {userData} })
-              ]
-          })
-          this.props.navigation.dispatch(resetAction)
-          }
-
-  renderChatFooter() {
-    return (
-      <TouchableHighlight onPress={() => this.goUserList(this.props.navigation.state.params.userData)}>
-        <View style={{flexDirection:'row', backgroundColor:'grey', padding:10}} >
-          <View style={{justifyContent:'center', marginLeft:10}} >
-            <Text style={{fontSize:18}} >Go to User List</Text>
-          </View>
-        </View>
-      </TouchableHighlight>
-    )
-  }
+  
 
   onSend(messages = []) {
     Promise.all(Promise.map(messages, (message) => {
@@ -96,8 +69,6 @@ export default class Messenger extends React.Component {
           messages={this.state.messages}
           onSend={(messages) => this.onSend(messages)}
           user={this.state.user}
-          bottomOffset={200}
-          onPressActionButton={() => this.goUserList(this.props.navigation.state.params.userData) }
         />
     );
   }
