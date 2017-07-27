@@ -15,23 +15,23 @@ export default class LoginComponent extends Component {
   }
 
   componentDidMount() {
-      //firebase.auth().signOut()
-      firebase.auth().onAuthStateChanged(auth => {
-          if (auth) {
-              this.firebaseRef = firebase.database().ref('users')
-              this.firebaseRef.child(auth.uid).on('value', snap =>{
-                  const userData = snap.val()
-                  console.log(userData)
-                  if (userData != null) {
-                      this.firebaseRef.child(auth.uid).off('value')
-                      this.goMessenger(userData)
-                   }
-              })
+    //firebase.auth().signOut()
+    firebase.auth().onAuthStateChanged(auth => {
+      if (auth) {
+        this.firebaseRef = firebase.database().ref('users')
+        this.firebaseRef.child(auth.uid).on('value', snap =>{
+          const userData = snap.val()
+          console.log(userData)
+          if (userData != null) {
+            this.firebaseRef.child(auth.uid).off('value')
+            this.goUserList(userData)
           }
-          else {
-          this.setState({showSpinner: false})
+        })
       }
-      })
+      else {
+        this.setState({showSpinner: false})
+      }
+    })
   }
 
 
@@ -46,11 +46,11 @@ export default class LoginComponent extends Component {
       firebase.database().ref('users').child(uid).update({...userData,uid})
   }
 
-   goMessenger(userData) {
+   goUserList(userData) {
           const resetAction = NavigationActions.reset({
               index: 0,
               actions: [
-              NavigationActions.navigate({ routeName: 'Messenger', params: {userData} })
+              NavigationActions.navigate({ routeName: 'UserList', params: {userData} })
               ]
           })
           this.props.navigation.dispatch(resetAction)
@@ -83,7 +83,7 @@ export default class LoginComponent extends Component {
           //console.log(uid, email, displayName)
           this.createUser(uid, userData)
           //console.log(userData)
-          this.goMessenger(userData)
+          this.goUserList(userData)
           break
         }
         case 'cancel': {

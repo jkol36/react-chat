@@ -13,7 +13,6 @@ export default class Messenger extends React.Component {
   }
 
   componentDidMount() {
-    console.log('messenger component mounting')
     messagesRef.child(this.state.user.uid).once('value', s => {
       if(s.exists()) {
         this.setState({
@@ -48,7 +47,6 @@ export default class Messenger extends React.Component {
   }
 
   onSend(messages = []) {
-    console.log('yoo messages', messages)
     Promise.all(Promise.map(messages, (message) => {
       let newMessageRef = messagesRef.child(this.state.user.uid).push()
       return newMessageRef.set(Object.assign({}, message, {createdAt: new Date()}))
@@ -62,7 +60,6 @@ export default class Messenger extends React.Component {
   }
 
   render() {
-    console.log('state', this.state)
     return (
       <GiftedChat
         messages={this.state.messages}
