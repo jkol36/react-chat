@@ -8,15 +8,17 @@ export default class Messenger extends React.Component {
 
     this.state = {
       messages: [],
-      user: props.navigation.state.params.userData
+      user: props.navigation.state.params.userData,
+      user2: props.navigation.state.params.user2
     }
   }
 
   componentDidMount() {
+    console.log('messenger mounting', this.props)
     messagesRef.child(this.state.user.uid).once('value', s => {
       if(s.exists()) {
         this.setState({
-          messages: Object.keys(s.val()).map(k => s.val()[k])
+          messages: Object.keys(s.val()).map(k => s.val()[k]).filter(message => message.userTwo === this.props.navigation.state.params.userTwo)
         })
       }
     })
@@ -49,7 +51,7 @@ export default class Messenger extends React.Component {
   onSend(messages = []) {
     Promise.all(Promise.map(messages, (message) => {
       let newMessageRef = messagesRef.child(this.state.user.uid).push()
-      return newMessageRef.set(Object.assign({}, message, {createdAt: new Date()}))
+      return newMessageRef.set(Object.assign({}, message, {createdAt: new Date(), userTwo: this.props.navigation.state.params.userTwo}))
     })) 
     .then(() => {
         this.setState((previousState) => ({

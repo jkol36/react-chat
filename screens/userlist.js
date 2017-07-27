@@ -5,6 +5,7 @@ import {
   View,
   TouchableHighlight
 } from 'react-native'
+import { NavigationActions } from 'react-navigation'
 import { userRef } from '../config'
 
 import CircleImage from '../components/circleImage'
@@ -18,7 +19,7 @@ export default class UserList extends Component {
   componentDidMount() {
     userRef.once('value', s => {
       const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-      let users = Object.keys(s.val()).map(k => s.val()[k])
+      let users = Object.keys(s.val()).map(k => s.val()[k]).filter(user => user.uid !== this.props.navigation.state.params.userData.uid)
       if(s.exists) {
         this.setState({
           dataSource: ds.cloneWithRows(users),
@@ -28,16 +29,22 @@ export default class UserList extends Component {
     })
   }
 
-  selectUser = (user) => {
-    console.log('user selected', user)
+  selectUser(user) {
+    const resetAction = NavigationActions.reset({
+      index:0,
+      actions: [
+        NavigationActions.navigate({routeName:'Messenger', params: {userData: this.props.navigation.state.params.userData, userTwo: user }})
+      ]
+    })
+    this.props.navigation.dispatch(resetAction)
   }
 
   renderRow = (rowData) => {
     console.log('render row called with', rowData)
-    const {id, first_name, work} = rowData
+    const {id, first_name, work, uid} = rowData
     const bio = (work && work[0] && work[0].position) ? work[0].position.name : null
     return (
-      <TouchableHighlight onPress={() => this.selectUser.bind(id)}>
+      <TouchableHighlight onPress={() => this.selectUser(uid) }>
         <View style={{flexDirection:'row', backgroundColor:'white', padding:10}} >
           <CircleImage size={80} facebookID={id} />
           <View style={{justifyContent:'center', marginLeft:10}} >
