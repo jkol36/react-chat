@@ -9,13 +9,21 @@ import * as firebase from 'firebase'
 const {width,height} = Dimensions.get('window')
 
 export default class LoginComponent extends Component {
-
+  constructor(props) {
+    super(props)
+  }
   state = {
       showSpinner: true,
   }
 
   componentDidMount() {
     //firebase.auth().signOut()
+    if(this.props.navigation.state.params) {
+      if(this.props.navigation.state.params.loggedOut)
+        return firebase.auth().signOut().then(() => {
+          this.goLogin()
+        })
+    }
     firebase.auth().onAuthStateChanged(auth => {
       if (auth) {
         this.firebaseRef = firebase.database().ref('users')
@@ -50,7 +58,16 @@ export default class LoginComponent extends Component {
           const resetAction = NavigationActions.reset({
               index: 0,
               actions: [
-              NavigationActions.navigate({ routeName: 'UserList', params: {userData} })
+              NavigationActions.navigate({ routeName: 'UserList', params: {user1: userData} })
+              ]
+          })
+          this.props.navigation.dispatch(resetAction)
+          }
+    goLogin() {
+          const resetAction = NavigationActions.reset({
+              index: 0,
+              actions: [
+              NavigationActions.navigate({ routeName: 'Login'})
               ]
           })
           this.props.navigation.dispatch(resetAction)

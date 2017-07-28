@@ -14,19 +14,33 @@ const goUserList = (userData, navigation) => {
           const resetAction = NavigationActions.reset({
               index: 0,
               actions: [
-              NavigationActions.navigate({ routeName: 'UserList', params: {userData} })
+              NavigationActions.navigate({ routeName: 'UserList', params: {user1: userData} })
               ]
           })
           navigation.dispatch(resetAction)
           }
+const logout =(navigation) => {
+  const resetAction = NavigationActions.reset({
+              index: 0,
+              actions: [
+              NavigationActions.navigate({ routeName: 'Login', params:{loggedOut: true}})
+              ]
+          })
+          navigation.dispatch(resetAction)
+
+}
 const routeConfigs = {
     Login: {screen:Login},
     Messenger: {screen:Messenger, navigationOptions: ({navigation}) => ({
       headerRight: (
-        <Button title='Go Back To User List' onPress={() => goUserList(navigation.state.params.userData, navigation)}></Button>
+        <Button title='Go Back To User List' onPress={() => goUserList(navigation.state.params.user, navigation)}></Button>
       )
       })},
-    UserList: {screen: UserList}
+    UserList: {screen: UserList, navigationOptions: ({navigation}) => ({
+      headerRight: (
+        <Button title='Logout' onPress={() => logout(navigation)}/>
+      )
+    })}
     //Profile: {screen:Profile},
     //Explore: {screen:Explore},
 }

@@ -13,3 +13,4 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig)
 export const userRef = firebase.database().ref('users')
 export const messagesRef = firebase.database().ref('messages')
+export const threadRef = firebase.database().ref('threads')

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { NavigationActions } from 'react-navigation'
 import { GiftedChat } from 'react-native-gifted-chat';
-import { messagesRef } from '../config/index'
+import { messagesRef, threadRef } from '../config/index'
 
 export default class Messenger extends React.Component {
   constructor(props) {
@@ -9,17 +9,17 @@ export default class Messenger extends React.Component {
 
     this.state = {
       messages: [],
-      user: props.navigation.state.params.userData,
-      user2: props.navigation.state.params.user2
+      user: this.props.navigation.state.params.user
     }
   }
 
   componentDidMount() {
-    console.log('messenger mounting', this.props)
-    messagesRef.child(this.state.user.uid).once('value', s => {
+    messagesRef
+    .child(this.props.navigation.state.params.threadId)
+    .once('value', s => {
       if(s.exists()) {
         this.setState({
-          messages: Object.keys(s.val()).map(k => s.val()[k]).filter(message => message.userTwo === this.props.navigation.state.params.userTwo)
+          messages: Object.keys(s.val()).map(k => s.val()[k])
         })
       }
     })
@@ -52,8 +52,8 @@ export default class Messenger extends React.Component {
 
   onSend(messages = []) {
     Promise.all(Promise.map(messages, (message) => {
-      let newMessageRef = messagesRef.child(this.state.user.uid).push()
-      return newMessageRef.set(Object.assign({}, message, {createdAt: new Date(), userTwo: this.props.navigation.state.params.userTwo}))
+      let newMessageRef = messagesRef.child(this.props.navigation.state.params.threadId).push()
+      return newMessageRef.set(Object.assign({}, message, {createdAt: new Date(), }))
     })) 
     .then(() => {
         this.setState((previousState) => ({
