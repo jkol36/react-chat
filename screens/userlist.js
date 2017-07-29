@@ -8,6 +8,7 @@ import {
 import { NavigationActions } from 'react-navigation'
 import { userRef, threadRef } from '../config'
 
+
 import CircleImage from '../components/circleImage'
 
 export default class UserList extends Component {
@@ -30,6 +31,7 @@ export default class UserList extends Component {
   }
 
   selectUser(user) {
+    console.log('user selected')
     let thisThread = threadRef.push()
     let user1 = this.props.navigation.state.params.user1
     let threadId = user.uid > user1.uid ? user.uid + '-' + user1.uid : user1.uid + '-' + user.uid

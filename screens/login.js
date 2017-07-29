@@ -33,6 +33,7 @@ export default class LoginComponent extends Component {
           if (userData != null) {
             this.firebaseRef.child(auth.uid).off('value')
             this.goUserList(userData)
+            //this.goAudioChat(userData)
           }
         })
       }
@@ -59,6 +60,15 @@ export default class LoginComponent extends Component {
               index: 0,
               actions: [
               NavigationActions.navigate({ routeName: 'UserList', params: {user1: userData} })
+              ]
+          })
+          this.props.navigation.dispatch(resetAction)
+          }
+    goAudioChat(userData) {
+          const resetAction = NavigationActions.reset({
+              index: 0,
+              actions: [
+              NavigationActions.navigate({ routeName: 'AudioChat', params: {user1: userData} })
               ]
           })
           this.props.navigation.dispatch(resetAction)
@@ -100,7 +110,8 @@ export default class LoginComponent extends Component {
           //console.log(uid, email, displayName)
           this.createUser(uid, userData)
           //console.log(userData)
-          this.goUserList(userData)
+          //this.goUserList(userData)
+          this.goVideoChat(userdata)
           break
         }
         case 'cancel': {

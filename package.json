@@ -6,13 +6,18 @@
   "private": true,
   "main": "node_modules/expo/AppEntry.js",
   "dependencies": {
+    "async-await": "^0.1.40",
     "bluebird": "^3.5.0",
     "expo": "^19.0.0",
     "firebase": "^4.1.5",
     "react": "16.0.0-alpha.12",
     "react-native": "https://github.com/expo/react-native/archive/sdk-19.0.0.tar.gz",
+    "react-native-camera-roll-picker": "^1.1.9",
     "react-native-gifted-chat": "^0.2.5",
+    "react-native-nav": "^2.0.0",
     "react-native-swiper": "^1.5.4",
-    "react-navigation": "^1.0.0-beta.11"
+    "react-native-webrtc": "^1.58.1",
+    "react-navigation": "^1.0.0-beta.11",
+    "socket.io-client": "^2.0.3"
   }
 }
