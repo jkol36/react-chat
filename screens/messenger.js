@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import moment from 'moment'
 import { TouchableHighlight, Image, View, Text, Platform, Dimensions, StyleSheet } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 import { GiftedChat, Actions, Bubble } from 'react-native-gifted-chat';
@@ -83,12 +84,13 @@ export default class Messenger extends React.Component {
   }
 
   componentDidMount() {
+
     messagesRef
     .child(this.props.navigation.state.params.threadId)
     .once('value', s => {
       if(s.exists()) {
         this.setState({
-          messages: Object.keys(s.val()).map(k => s.val()[k])
+          messages: GiftedChat.append([], Object.keys(s.val()).map(k => s.val()[k]).sort((a, b) => a.createdAt - b.createdAt).reverse())
         })
       }
     })
@@ -181,7 +183,7 @@ export default class Messenger extends React.Component {
   onSend(messages = []) {
     Promise.all(Promise.map(messages, (message) => {
       let newMessageRef = messagesRef.child(this.props.navigation.state.params.threadId).push()
-      return newMessageRef.set(Object.assign({}, message, {createdAt: new Date(), }))
+      return newMessageRef.update(message)
     })) 
     .then(() => {
         this.setState((previousState) => ({
@@ -192,6 +194,10 @@ export default class Messenger extends React.Component {
   }
 
   render() {
+    let originalMessages = this.state.messages
+    console.log('original messages',originalMessages)
+    let sortedMessages = this.state.messages.sort((a, b) => a.createdAt - b.createdAt)
+    console.log('sorted messages', sortedMessages)
     return (
       <GiftedChat
           messages={this.state.messages}
